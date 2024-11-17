@@ -18,6 +18,7 @@ public class OpenAIServiceImpl implements OpenAIService {
 //        PromptTemplate template = new PromptTemplate(question);
 //        Prompt prompt = template.create();
         String content = chatClient.build().prompt().user(question).call().content();
+        assert content != null;
         return content;
     }
 }
