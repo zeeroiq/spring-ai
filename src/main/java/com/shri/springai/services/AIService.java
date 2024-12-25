@@ -1,6 +1,7 @@
 package com.shri.springai.services;
 
 import com.shri.springai.records.Answer;
+import com.shri.springai.records.GetCapitalRequest;
 import com.shri.springai.records.Question;
 
 public interface AIService {
@@ -12,6 +13,10 @@ public interface AIService {
     }
 
     default Answer getAnswer(Question question){
+        throw new RuntimeException("Not implemented");
+    }
+
+    default Answer getCapital(GetCapitalRequest getCapitalRequest){
         throw new RuntimeException("Not implemented");
     }
 }

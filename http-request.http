@@ -7,3 +7,19 @@ Content-Type: application/json
 }
 
 ###
+
+POST http://localhost:8080/ai/capital
+Content-Type: application/json
+
+{
+  "stateOrCountry": "Uttar Pradesh"
+}
+
+###
+
+POST http://localhost:8080/ai/capital
+Content-Type: application/json
+
+{
+  "stateOrCountry": "Sri Lanka"
+}

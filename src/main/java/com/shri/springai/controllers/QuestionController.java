@@ -1,6 +1,7 @@
 package com.shri.springai.controllers;
 
 import com.shri.springai.records.Answer;
+import com.shri.springai.records.GetCapitalRequest;
 import com.shri.springai.records.Question;
 import com.shri.springai.services.AIService;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -22,5 +23,10 @@ public class QuestionController {
     @PostMapping("/ask")
     public Answer askQuestion(@RequestBody Question question) {
         return mistraAIService.getAnswer(question);
+    }
+
+    @PostMapping("/capital")
+    public Answer getCapital(@RequestBody GetCapitalRequest getCapitalRequest) {
+        return mistraAIService.getCapital(getCapitalRequest);
     }
 }

@@ -1,6 +1,7 @@
 package com.shri.springai.services.impl;
 
 import com.shri.springai.records.Answer;
+import com.shri.springai.records.GetCapitalRequest;
 import com.shri.springai.records.Question;
 import com.shri.springai.services.AIService;
 import org.springframework.ai.chat.client.ChatClient;
@@ -41,6 +42,14 @@ public class MistralAIServiceImpl implements AIService {
     @Override
     public Answer getAnswer(Question question) {
         PromptTemplate promptTemplate = new PromptTemplate(question.question());
+        Prompt prompt = promptTemplate.create();
+        ChatResponse call = chatModel.call(prompt);
+        return new Answer(call.getResult().getOutput().getContent());
+    }
+
+    @Override
+    public Answer getCapital(GetCapitalRequest getCapitalRequest) {
+        PromptTemplate promptTemplate = new PromptTemplate("What is the capital of " + getCapitalRequest.stateOrCountry() + "?");
         Prompt prompt = promptTemplate.create();
         ChatResponse call = chatModel.call(prompt);
         return new Answer(call.getResult().getOutput().getContent());
