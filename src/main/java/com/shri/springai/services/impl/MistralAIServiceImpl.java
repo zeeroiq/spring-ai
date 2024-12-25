@@ -9,13 +9,20 @@ import org.springframework.ai.chat.model.ChatModel;
 import org.springframework.ai.chat.model.ChatResponse;
 import org.springframework.ai.chat.prompt.Prompt;
 import org.springframework.ai.chat.prompt.PromptTemplate;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Service;
+
+import java.util.Map;
 
 @Service(value = "mistralAIService")
 public class MistralAIServiceImpl implements AIService {
 
     private final ChatClient.Builder chatClient;
     private final ChatModel chatModel;
+
+    @Value("classpath:templates/get_capital_prompt.st")
+    private Resource getCapitalPromptTemplate;
 
 
     public MistralAIServiceImpl(ChatClient.Builder chatClient, ChatModel chatModel) {
@@ -49,8 +56,8 @@ public class MistralAIServiceImpl implements AIService {
 
     @Override
     public Answer getCapital(GetCapitalRequest getCapitalRequest) {
-        PromptTemplate promptTemplate = new PromptTemplate("What is the capital of " + getCapitalRequest.stateOrCountry() + "?");
-        Prompt prompt = promptTemplate.create();
+        PromptTemplate promptTemplate = new PromptTemplate(getCapitalPromptTemplate);
+        Prompt prompt = promptTemplate.create(Map.of("stateOrCountry", getCapitalRequest.stateOrCountry()));
         ChatResponse call = chatModel.call(prompt);
         return new Answer(call.getResult().getOutput().getContent());
     }
