@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.shri.springai.records.Answer;
 import com.shri.springai.records.GetCapitalRequest;
+import com.shri.springai.records.GetCapitalResponse;
 import com.shri.springai.records.Question;
 import com.shri.springai.services.AIService;
 import org.slf4j.Logger;
@@ -13,6 +14,7 @@ import org.springframework.ai.chat.model.ChatModel;
 import org.springframework.ai.chat.model.ChatResponse;
 import org.springframework.ai.chat.prompt.Prompt;
 import org.springframework.ai.chat.prompt.PromptTemplate;
+import org.springframework.ai.converter.BeanOutputConverter;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Service;
@@ -26,7 +28,7 @@ public class MistralAIServiceImpl implements AIService {
 
     private final ChatClient.Builder chatClient;
     private final ChatModel chatModel;
-    private final ObjectMapper jacksonObjectMapper;
+    private final ObjectMapper objectMapper;
 
     @Value("classpath:templates/get_capital_prompt.st")
     private Resource getCapitalPromptTemplate;
@@ -34,11 +36,15 @@ public class MistralAIServiceImpl implements AIService {
     @Value(value = "classpath:templates/get_capital_info_prompt.st")
     private Resource getGetCapitalInfoPromptTemplate;
 
+    @Value(value = "classpath:templates/get_capital_prompt_format.st")
+    private Resource getCapitalPromptFormatTemplate;
 
-    public MistralAIServiceImpl(ChatClient.Builder chatClient, ChatModel chatModel, ObjectMapper jacksonObjectMapper) {
+
+
+    public MistralAIServiceImpl(ChatClient.Builder chatClient, ChatModel chatModel, ObjectMapper objectMapper) {
         this.chatClient = chatClient;
         this.chatModel = chatModel;
-        this.jacksonObjectMapper = jacksonObjectMapper;
+        this.objectMapper = objectMapper;
     }
 
     @Override
@@ -74,7 +80,7 @@ public class MistralAIServiceImpl implements AIService {
         log.info("Response: {}", content);
         String responseAsString;
         try {
-            JsonNode jsonNode = jacksonObjectMapper.readTree(content);
+            JsonNode jsonNode = objectMapper.readTree(content);
             responseAsString = jsonNode.get("answer").asText();
         } catch (JsonProcessingException e) {
             throw new RuntimeException(e);
@@ -88,6 +94,19 @@ public class MistralAIServiceImpl implements AIService {
         Prompt prompt = promptTemplate.create(Map.of("stateOrCountry", getCapitalRequest.stateOrCountry()));
         ChatResponse call = chatModel.call(prompt);
         return new Answer(call.getResult().getOutput().getContent());
+    }
+
+    @Override
+    public GetCapitalResponse getCapitalJsonFormat(GetCapitalRequest getCapitalRequest) {
+        BeanOutputConverter<GetCapitalResponse> converter = new BeanOutputConverter<>(GetCapitalResponse.class);
+        String format = converter.getFormat();
+        log.info("Format: {}", format);
+
+        PromptTemplate promptTemplate = new PromptTemplate(getCapitalPromptFormatTemplate);
+        Prompt prompt = promptTemplate.create(Map.of("stateOrCountry", getCapitalRequest.stateOrCountry(), "format", format));
+        ChatResponse response = chatModel.call(prompt);
+
+        return converter.convert(response.getResult().getOutput().getContent());
     }
 
 }

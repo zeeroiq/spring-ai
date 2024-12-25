@@ -2,6 +2,7 @@ package com.shri.springai.services;
 
 import com.shri.springai.records.Answer;
 import com.shri.springai.records.GetCapitalRequest;
+import com.shri.springai.records.GetCapitalResponse;
 import com.shri.springai.records.Question;
 
 public interface AIService {
@@ -21,6 +22,10 @@ public interface AIService {
     }
 
     default Answer getCapitalInfo(GetCapitalRequest getCapitalRequest) {
+        throw new RuntimeException("Not implemented");
+    }
+
+    default GetCapitalResponse getCapitalJsonFormat(GetCapitalRequest getCapitalRequest) {
         throw new RuntimeException("Not implemented");
     }
 }
