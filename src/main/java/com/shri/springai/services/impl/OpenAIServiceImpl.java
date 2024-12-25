@@ -20,9 +20,4 @@ public class OpenAIServiceImpl implements AIService {
         String content = chatClient.build().prompt().user(question).call().content();
         return content;
     }
-
-    @Override
-    public String getAnswer(String question, String model) {
-        return "";
-    }
 }

@@ -1,0 +1,9 @@
+###
+POST http://localhost:8080/ai/ask
+Content-Type: application/json
+
+{
+  "question": "What is the capital of India ?"
+}
+
+###
