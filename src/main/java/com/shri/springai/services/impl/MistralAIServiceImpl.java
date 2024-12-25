@@ -24,6 +24,9 @@ public class MistralAIServiceImpl implements AIService {
     @Value("classpath:templates/get_capital_prompt.st")
     private Resource getCapitalPromptTemplate;
 
+    @Value(value = "classpath:templates/get_capital_info_prompt.st")
+    private Resource getGetCapitalInfoPromptTemplate;
+
 
     public MistralAIServiceImpl(ChatClient.Builder chatClient, ChatModel chatModel) {
         this.chatClient = chatClient;
@@ -61,4 +64,13 @@ public class MistralAIServiceImpl implements AIService {
         ChatResponse call = chatModel.call(prompt);
         return new Answer(call.getResult().getOutput().getContent());
     }
+
+    @Override
+    public Answer getCapitalInfo(GetCapitalRequest getCapitalRequest) {
+        PromptTemplate promptTemplate = new PromptTemplate(getGetCapitalInfoPromptTemplate);
+        Prompt prompt = promptTemplate.create(Map.of("stateOrCountry", getCapitalRequest.stateOrCountry()));
+        ChatResponse call = chatModel.call(prompt);
+        return new Answer(call.getResult().getOutput().getContent());
+    }
+
 }

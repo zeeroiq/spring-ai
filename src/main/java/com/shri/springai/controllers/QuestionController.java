@@ -29,4 +29,9 @@ public class QuestionController {
     public Answer getCapital(@RequestBody GetCapitalRequest getCapitalRequest) {
         return mistraAIService.getCapital(getCapitalRequest);
     }
+
+    @PostMapping("/capital-info")
+    public Answer getCapitalInfo(@RequestBody GetCapitalRequest getCapitalRequest) {
+        return mistraAIService.getCapitalInfo(getCapitalRequest);
+    }
 }

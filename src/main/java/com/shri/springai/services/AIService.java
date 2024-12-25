@@ -19,4 +19,8 @@ public interface AIService {
     default Answer getCapital(GetCapitalRequest getCapitalRequest){
         throw new RuntimeException("Not implemented");
     }
+
+    default Answer getCapitalInfo(GetCapitalRequest getCapitalRequest) {
+        throw new RuntimeException("Not implemented");
+    }
 }
