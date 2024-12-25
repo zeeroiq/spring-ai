@@ -14,7 +14,7 @@ class OpenAIServiceImplTest {
 
     @Test
     void getAnswer() {
-        String question = "What is the capital of France?";
+        String question = "What is the capital of France, one word answer pls?";
         String expectedAnswer = "Paris";
         String actualAnswer = openAIService.getAnswer(question);
         assertEquals(expectedAnswer, actualAnswer);
