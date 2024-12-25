@@ -3,10 +3,7 @@ package com.shri.springai.services.impl;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.shri.springai.records.Answer;
-import com.shri.springai.records.GetCapitalRequest;
-import com.shri.springai.records.GetCapitalResponse;
-import com.shri.springai.records.Question;
+import com.shri.springai.records.*;
 import com.shri.springai.services.AIService;
 import org.slf4j.Logger;
 import org.springframework.ai.chat.client.ChatClient;
@@ -94,6 +91,18 @@ public class MistralAIServiceImpl implements AIService {
         Prompt prompt = promptTemplate.create(Map.of("stateOrCountry", getCapitalRequest.stateOrCountry()));
         ChatResponse call = chatModel.call(prompt);
         return new Answer(call.getResult().getOutput().getContent());
+    }
+
+    @Override
+    public GetCapitalInfoResponse getCapitalInfoFormatBinding(GetCapitalRequest getCapitalRequest) {
+        BeanOutputConverter<GetCapitalInfoResponse> converter = new BeanOutputConverter<>(GetCapitalInfoResponse.class);
+        String format = converter.getFormat();
+        log.info("\nFormat: {}", format);
+
+        PromptTemplate promptTemplate = new PromptTemplate(getCapitalPromptFormatTemplate);
+        Prompt prompt = promptTemplate.create(Map.of("stateOrCountry", getCapitalRequest.stateOrCountry(), "format", format));
+        ChatResponse call = chatModel.call(prompt);
+        return converter.convert(call.getResult().getOutput().getContent());
     }
 
     @Override

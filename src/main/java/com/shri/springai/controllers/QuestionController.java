@@ -1,9 +1,6 @@
 package com.shri.springai.controllers;
 
-import com.shri.springai.records.Answer;
-import com.shri.springai.records.GetCapitalRequest;
-import com.shri.springai.records.GetCapitalResponse;
-import com.shri.springai.records.Question;
+import com.shri.springai.records.*;
 import com.shri.springai.services.AIService;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -39,5 +36,10 @@ public class QuestionController {
     @PostMapping("/capital-info")
     public Answer getCapitalInfo(@RequestBody GetCapitalRequest getCapitalRequest) {
         return mistraAIService.getCapitalInfo(getCapitalRequest);
+    }
+
+    @PostMapping("/capital-info-json")
+    public GetCapitalInfoResponse getCapitalInfoJsonBinding(@RequestBody GetCapitalRequest getCapitalRequest) {
+        return mistraAIService.getCapitalInfoFormatBinding(getCapitalRequest);
     }
 }

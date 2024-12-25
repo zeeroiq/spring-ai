@@ -41,3 +41,11 @@ Content-Type: application/json
 {
   "stateOrCountry": "Sri Lanka"
 }
+###
+
+POST http://localhost:8080/ai/capital-info-json
+Content-Type: application/json
+
+{
+  "stateOrCountry": "Uttar Pradesh"
+}
