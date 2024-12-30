@@ -1,0 +1,6 @@
+spring:
+  application:
+    name: spring-ai
+  ai:
+    mistralai:
+      api-key: ${MISTRAL_API_KEY}
