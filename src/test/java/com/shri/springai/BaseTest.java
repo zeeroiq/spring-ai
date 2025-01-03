@@ -1,6 +1,7 @@
 package com.shri.springai;
 
 import org.springframework.ai.autoconfigure.mistralai.MistralAiChatProperties;
+import org.springframework.ai.chat.messages.Message;
 import org.springframework.ai.chat.prompt.Prompt;
 import org.springframework.ai.chat.prompt.PromptTemplate;
 import org.springframework.ai.mistralai.MistralAiChatModel;
@@ -8,6 +9,7 @@ import org.springframework.ai.mistralai.MistralAiChatOptions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import java.util.List;
 import java.util.Map;
 
 @SpringBootTest
@@ -44,5 +46,10 @@ public class BaseTest {
         Prompt promptToExecute = new Prompt(promptTemplate.createMessage(), chatOptions);
 
         return chatModel.call(promptToExecute).getResult().getOutput().getContent();
+    }
+
+    public String chat(List<Message> messages) {
+        Prompt prompt = new Prompt(messages);
+        return chatModel.call(prompt).getResult().getOutput().getContent();
     }
 }
